@@ -76,7 +76,7 @@ contract Donations {
         return (donations[_id].donators, donations[_id].donations);
     }
 
-    function getAllCampaigns() public view returns (Donation[] memory) {
+    function getAllDonations() public view returns (Donation[] memory) {
         // Create new array with specific size.
         Donation[] memory allDonations = new Donation[](numberOfDonations);
 
