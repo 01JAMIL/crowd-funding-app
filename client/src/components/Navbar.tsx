@@ -109,7 +109,7 @@ const Navbar: React.FC<{
                         ${darkMode ? 'bg-white' : 'border border-[#121212]'}
                         hover:bg-gray-200
                         `}
-                        onClick={() => handleNavigate('/home')}
+                        onClick={() => handleNavigate('/')}
                     >
                         <HomeIcon
                             className='mr-2 md:mr-0'
@@ -147,11 +147,12 @@ const Navbar: React.FC<{
 
                     <div
                         className={`
-                        flex items-center md:mb-0 mb-[10px] md:w-max w-[150px] 
+                        relative flex items-center md:mb-0 mb-[10px] md:w-max w-[150px] 
                         cursor-pointer mr-2 p-[5px] rounded-[8px] 
                         ${darkMode ? 'bg-white' : 'border border-[#121212]'}
                         hover:bg-gray-200
                         `}
+                        onClick={() => handleNavigate('/profile')}
                     >
                         <PersonIcon
                             className='mr-2 md:mr-0'
