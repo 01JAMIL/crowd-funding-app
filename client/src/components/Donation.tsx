@@ -44,6 +44,15 @@ const Donation: React.FC<{ darkMode: boolean }> = ({ darkMode }) => {
 
                         <div>
                             <div className='font-bold'>
+                                Days left
+                            </div>
+                            <div className='text-sm p-2 text-justify'>
+                                21
+                            </div>
+                        </div>
+
+                        <div>
+                            <div className='font-bold'>
                                 Collected amount
                             </div>
                             <div className='text-sm p-2 text-justify text-green-600'>
@@ -67,7 +76,12 @@ const Donation: React.FC<{ darkMode: boolean }> = ({ darkMode }) => {
                                     />
                                 </div>
                                 <div className='sm:truncate md:truncate'>
-                                    0x12ez121z2ef1ze21fze8f4e5fe15ezf1z8f1e
+                                    <div>
+                                        0x12ez121z2ef1ze21fze8f4e5fe15ezf1z8f1e
+                                    </div>
+                                    <div className='text-[10px]'>
+                                        <span className='font-bold'>10</span> Donation(s)
+                                    </div>
                                 </div>
                             </div>
                         </div>

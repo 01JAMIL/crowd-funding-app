@@ -168,6 +168,7 @@ const Navbar: React.FC<{
                         md:w-max w-[150px] md:mb-0 mb-[10px] text-white 
                         bg-purple-700 p-[5px] border border-purple-700 
                         rounded-[8px] hover:bg-purple-500 hover:border-purple-500'
+                        onClick={() => handleNavigate('/create')}
                     >
                         Create donation
                     </button>

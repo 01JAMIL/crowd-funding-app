@@ -4,9 +4,12 @@ import DonationsList from './components/DonationsList';
 import Navbar from './components/Navbar';
 import { Routes, Route, Navigate } from 'react-router-dom'
 import Donation from './components/Donation';
+import CreateDonation from './components/CreateDonation';
+import ConnectWallet from './components/ConnectWallet';
 
 function App() {
   const [darkMode, setDarkMode] = useState<boolean>(true)
+  const [connectedWallet, setConnectedWallet] = useState<boolean>(false)
   useEffect(() => {
     if (localStorage.getItem('mode') && localStorage.getItem('mode') === 'light') {
       document.getElementsByTagName('body')[0].style.backgroundColor = '#FFF'
@@ -17,8 +20,14 @@ function App() {
     }
   }, [darkMode])
 
+  if (connectedWallet) {
+    return (
+      <ConnectWallet />
+    )
+  }
+
   return (
-    <div className={`min-h-[90vh] bg-[${darkMode ? '#121212' : '#FFF'}]`}>
+    <div className={`bg-[${darkMode ? '#121212' : '#FFF'}]`}>
 
       <Navbar
         setDarkMode={setDarkMode}
@@ -42,6 +51,16 @@ function App() {
             />
           }
         />
+
+        <Route
+          path='/create'
+          element={
+            <CreateDonation
+              darkMode={darkMode}
+            />
+          }
+        />
+
       </Routes>
     </div>
   );
