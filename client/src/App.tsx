@@ -20,6 +20,7 @@ function App() {
   const dispatch = useAppDispatch()
 
   useEffect(() => {
+
     if (localStorage.getItem('mode') && localStorage.getItem('mode') === 'light') {
       document.getElementsByTagName('body')[0].style.backgroundColor = '#FFF'
       setDarkMode(false)

@@ -17,7 +17,7 @@ export const checkConnectedAccounts = createAsyncThunk('wallet/checkConnectedAcc
 
 export const walletConnection = createAsyncThunk('wallet/connect', async () => {
     const provider = new ethers.providers.Web3Provider(window.ethereum)
-
+    provider.getSigner(0)
     const accounts = await provider.send('eth_requestAccounts', [])
     const balance = await provider.getBalance(accounts[0])
     return {
