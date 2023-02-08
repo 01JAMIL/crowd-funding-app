@@ -1,8 +1,7 @@
-/* const HDWalletProvider = require('truffle-hdwallet-provider')
+const HDWalletProvider = require('truffle-hdwallet-provider')
 
 require('dotenv').config()
 
- */
 module.exports = {
   networks: {
     development: {
@@ -10,16 +9,17 @@ module.exports = {
       port: 7545,
       network_id: "*", // Match any network id
       gas: 5000000
-    }/* ,
+    },
 
     goerli: {
+      networkCheckTimeout: 999999,
       provider: () => {
-        return new HDWalletProvider(process.env.PROVATE_KEY, process.env.END_POINT + process.env.API_KEY)
+        return new HDWalletProvider(process.env.PRIVATE_KEY, process.env.END_POINT + process.env.API_KEY)
       },
       network_id: '5',
       gas: 4465030,
       gasPrice: 10000000000
-    } */
+    }
   },
   compilers: {
     solc: {
