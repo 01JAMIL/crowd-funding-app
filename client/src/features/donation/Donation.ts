@@ -14,4 +14,5 @@ export interface DonationInitialState {
     loading: boolean
     donations: Donation[]
     error: any
+    success: boolean
 }

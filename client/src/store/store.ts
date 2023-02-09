@@ -5,7 +5,10 @@ export const store = configureStore({
     reducer: {
         wallet: walletReducer,
         donation: donationReducer
-    }
+    },
+    middleware: (getDefaultMiddleware) => getDefaultMiddleware({
+        serializableCheck: false
+    }),
 })
 
 export type RootState = ReturnType<typeof store.getState>

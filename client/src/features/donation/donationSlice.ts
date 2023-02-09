@@ -1,24 +1,16 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
-import { DonationInitialState } from './Donation'
+import { Donation, DonationInitialState } from './Donation'
 import { ethers } from 'ethers'
+
 declare var window: any
 
 const connectSmartContract = async () => {
     const provider = new ethers.providers.Web3Provider(window.ethereum)
 
-    const DonationType = `(
-        address owner, 
-        string title, 
-        string story, 
-        uint256 goal, 
-        uint256 deadline, 
-        uint256 collectedAmount, 
-        string image, 
-        address[] donators,
-        uint256[] donations
-    )`
+    const DonationType = `(address owner, string title, string story, uint256 goal, uint256 deadline, uint256 collectedAmount, string image, address[] donators , uint256[] donations)`
 
     const ABI = [
+        'function getNumberOfDonations() public view returns (uint256)',
         `function createDonation(
             address _owner,
             string _title,
@@ -30,10 +22,10 @@ const connectSmartContract = async () => {
 
         'function donateToDonation(uint256 _id) public',
         'function getDonators(uint256 _id) returns (address[] , uint256[])',
-        `function getAllDonations() public view returns (${DonationType}[])`
+        `function getAllDonations() public view returns (${DonationType} [])`
     ]
     const contract = new ethers.Contract(
-        '0xA3b57f31060AfeB90FDCdB3cf98bF27CD927Ba8B',
+        '0xA5F7da96EDB941e91e14565b447D70B7d85Dcd0B',
         ABI,
         provider.getSigner(0)
     )
@@ -44,16 +36,27 @@ const connectSmartContract = async () => {
 
 
 export const getDonations = createAsyncThunk('donation/getAll', async () => {
-    const contract: any = connectSmartContract()
+    const contract: any = await connectSmartContract()
+    const data = await contract.getAllDonations()
+    return data
+})
 
-    return await contract.getAllDonations()
+export const saveDonation = createAsyncThunk('donation/save', async (data: Donation) => {
+    const { owner, title, story, goal, deadline, image } = data
+    const contarct: any = await connectSmartContract()
+    const goalFloat = parseFloat(goal.toString())
+    const weiValue = ethers.utils.parseEther(goalFloat.toString()).toString()
+    const transaction = await contarct.createDonation(owner, title, story, weiValue, deadline, image)
+    const returnedValue = await transaction.wait()
+    return returnedValue
 })
 
 
 const initialState: DonationInitialState = {
     loading: false,
     donations: [],
-    error: {}
+    error: {},
+    success: false
 }
 
 const donationSlice = createSlice({
@@ -64,6 +67,7 @@ const donationSlice = createSlice({
             state.loading = false
             state.donations = []
             state.error = {}
+            state.success = false
         }
     },
     extraReducers(builder) {
@@ -81,6 +85,23 @@ const donationSlice = createSlice({
             state.loading = false
             state.donations = []
             state.error = action.payload
+        })
+
+
+        builder.addCase(saveDonation.pending, state => {
+            state.loading = true
+        })
+
+        builder.addCase(saveDonation.fulfilled, (state, action) => {
+            state.loading = false
+            state.success = true
+            //console.log(BigInt(action.payload.returnedValue.logs[0].data).toString())
+        })
+
+        builder.addCase(saveDonation.rejected, (state, action) => {
+            state.loading = false
+            state.error = action.payload
+            state.success = false
         })
     }
 })
