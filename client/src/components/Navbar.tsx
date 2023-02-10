@@ -32,6 +32,7 @@ const Navbar: React.FC<{
     }, [])
 
     const handleNavigate = (to: string) => {
+        setOpenNavbar(false)
         navigate(to)
     }
 

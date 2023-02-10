@@ -11,6 +11,19 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+::-webkit-scrollbar {
+  width: 3px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+
+::-webkit-scrollbar-thumb {
+  background: #888;
+}
+
 code {
   font-family: 'Poppins', sans-serif;
 }

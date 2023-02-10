@@ -1,7 +1,7 @@
 import React, { FormEvent, useEffect, useState } from 'react'
 import AccountCircleIcon from '@mui/icons-material/AccountCircle'
 import { useAppDispatch, useAppSelector } from '../store/hooks'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 import { getDonations } from '../features/donation/donationSlice'
 import { ethers } from 'ethers'
 import { donate } from '../features/donation/donationSlice'
@@ -14,8 +14,7 @@ const Donation: React.FC<{ darkMode: boolean }> = ({ darkMode }) => {
         amount: '',
         address: ''
     })
-
-    const navigate = useNavigate()
+    const { address } = useAppSelector(state => state.wallet)
     const { donations, loading, success } = useAppSelector(state => state.donation)
     const dispatch = useAppDispatch()
     const { id } = useParams()
@@ -38,10 +37,7 @@ const Donation: React.FC<{ darkMode: boolean }> = ({ darkMode }) => {
 
     useEffect(() => {
         dispatch(getDonations())
-        if (success) {
-            navigate('/', { replace: true })
-        }
-    }, [dispatch, navigate, success])
+    }, [dispatch, success])
 
 
     if (loading) {
@@ -127,14 +123,14 @@ const Donation: React.FC<{ darkMode: boolean }> = ({ darkMode }) => {
                                             Creator
                                         </div>
 
-                                        <div className='p-2 flex items-center'>
+                                        <div className='p-2 flex truncate'>
                                             <div className='mr-2'>
                                                 <AccountCircleIcon
                                                     fontSize='large'
                                                 />
                                             </div>
-                                            <div className='sm:truncate md:truncate'>
-                                                <div className='sm:truncate md:truncate'>
+                                            <div>
+                                                <div className='text-sm sm:truncate md:truncate'>
                                                     {
                                                         donation.owner
                                                     }
@@ -226,10 +222,11 @@ const Donation: React.FC<{ darkMode: boolean }> = ({ darkMode }) => {
                                                         border border-purple-700 bg-purple-700 w-full p-[5px] 
                                                         rounded-[8px] text-white hover:border-purple-500 
                                                         hover:bg-purple-500 disabled:bg-purple-500 disabled:border-purple-500'
-                                                        disabled={loading}
+                                                        disabled={donation.owner.toUpperCase() === address.toUpperCase()}
                                                     >
                                                         {
-                                                            loading ? 'Loading ...' : 'Donate'
+                                                            donation.owner.toUpperCase() === address.toUpperCase() ?
+                                                                'You are the owner' : 'Donate'
                                                         }
                                                     </button>
                                                 </form>

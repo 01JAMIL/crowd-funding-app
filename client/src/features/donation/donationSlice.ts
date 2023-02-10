@@ -25,7 +25,7 @@ const connectSmartContract = async () => {
         `function getAllDonations() public view returns (${DonationType} [])`
     ]
     const contract = new ethers.Contract(
-        '0xA5F7da96EDB941e91e14565b447D70B7d85Dcd0B',
+        '0x8ef3eFeaBFbf7d04a6C05EE884C002364f822Ddb',
         ABI,
         provider.getSigner(0)
     )
