@@ -22,6 +22,25 @@ const CreateDonation: React.FC<{ darkMode: boolean }> = ({ darkMode }) => {
         donators: [],
         donations: []
     })
+    const [error, setError] = useState<any>(false)
+
+
+    const validateForm = (data: Donation) => {
+        let error = false
+        if (
+            data.owner === '' ||
+            data.title === '' ||
+            data.story === '' ||
+            data.goal === 0 ||
+            data.deadline === 0 ||
+            data.image === ''
+
+        ) {
+            error = true
+        }
+
+        return error
+    }
 
     const changeHandler = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         setForm({
@@ -33,14 +52,20 @@ const CreateDonation: React.FC<{ darkMode: boolean }> = ({ darkMode }) => {
     const submitHandler = (e: FormEvent) => {
         e.preventDefault()
         form.owner = address
-
-        dispatch(saveDonation(form))
+        const formError = validateForm(form)
+        if (formError) {
+            setError(formError)
+        } else {
+            setError(false)
+            dispatch(saveDonation(form))
+        }
     }
 
 
     useEffect(() => {
         if (success) {
-            navigate('/')
+            console.log('Success !')
+            navigate('/', { replace: true })
         }
     }, [success, navigate])
 
@@ -53,7 +78,7 @@ const CreateDonation: React.FC<{ darkMode: boolean }> = ({ darkMode }) => {
 
                 <div className={`mb-10 shadow-xl rounded-[16px] p-[20px] ${darkMode ? 'bg-[#1c1c24] text-white' : 'bg-white text-[#121212]'}`}>
                     <form onSubmit={submitHandler}>
-                        <div className='w-full mb-8'>
+                        <div className='w-full mb-2'>
                             <label
                                 className='block tracking-wide text-sm font-bold mb-2' htmlFor='title'>
                                 Title *
@@ -61,7 +86,7 @@ const CreateDonation: React.FC<{ darkMode: boolean }> = ({ darkMode }) => {
                             <input
                                 className={`
                                 appearance-none block w-full
-                                border p-[8px] rounded-[8px] mb-3
+                                border p-[8px] rounded-[8px] mb-2
                                 leading-tight focus:outline-none
                                 ${darkMode ? 'bg-[#1c1c24] text-white' : 'bg-white focus:bg-white text-gray-700'}
                             `}
@@ -71,10 +96,14 @@ const CreateDonation: React.FC<{ darkMode: boolean }> = ({ darkMode }) => {
                                 placeholder='Title of your donation'
                                 onChange={changeHandler}
                             />
-                            {/*  <p className="text-red-500 text-xs">Please fill out this field.</p> */}
+                            <div className='h-[15px] px-2'>
+                                {
+                                    (error && form.title === '') && <p className="text-red-500 text-xs">Please fill out this field.</p>
+                                }
+                            </div>
                         </div>
 
-                        <div className='w-full mb-8'>
+                        <div className='w-full mb-2'>
                             <label
                                 className='block tracking-wide text-sm font-bold mb-2' htmlFor='story'>
                                 Story *
@@ -91,10 +120,14 @@ const CreateDonation: React.FC<{ darkMode: boolean }> = ({ darkMode }) => {
                             `}>
 
                             </textarea>
-                            {/*  <p className="text-red-500 text-xs">Please fill out this field.</p> */}
+                            <div className='h-[15px] px-2'>
+                                {
+                                    (error && form.story === '') && <p className="text-red-500 text-xs">Please fill out this field.</p>
+                                }
+                            </div>
                         </div>
 
-                        <div className='w-full flex mb-8'>
+                        <div className='w-full flex mb-2'>
                             <div className='w-full pr-4'>
                                 <label
                                     className='block tracking-wide text-sm font-bold mb-2' htmlFor='goal'>
@@ -115,7 +148,11 @@ const CreateDonation: React.FC<{ darkMode: boolean }> = ({ darkMode }) => {
                                     placeholder='ETH 0.1'
                                     onChange={changeHandler}
                                 />
-                                {/*  <p className="text-red-500 text-xs">Please fill out this field.</p> */}
+                                <div className='h-[15px] px-2'>
+                                    {
+                                        (error && form.goal === 0) && <p className="text-red-500 text-xs">Please fill out this field.</p>
+                                    }
+                                </div>
                             </div>
 
                             <div className='w-full pl-4'>
@@ -135,12 +172,16 @@ const CreateDonation: React.FC<{ darkMode: boolean }> = ({ darkMode }) => {
                                     type='date'
                                     onChange={changeHandler}
                                 />
-                                {/*  <p className="text-red-500 text-xs">Please fill out this field.</p> */}
+                                <div className='h-[15px] px-2'>
+                                    {
+                                        (error && form.deadline === 0) && <p className="text-red-500 text-xs">Please fill out this field.</p>
+                                    }
+                                </div>
                             </div>
                         </div>
 
 
-                        <div className='w-full mb-8'>
+                        <div className='w-full mb-2'>
                             <label
                                 className='block tracking-wide text-sm font-bold mb-2' htmlFor='image'>
                                 Image *
@@ -158,7 +199,11 @@ const CreateDonation: React.FC<{ darkMode: boolean }> = ({ darkMode }) => {
                                 onChange={changeHandler}
                                 placeholder="Place your image URl here."
                             />
-                            {/*  <p className="text-red-500 text-xs">Please fill out this field.</p> */}
+                            <div className='h-[15px] px-2'>
+                                {
+                                    (error && form.image === '') && <p className="text-red-500 text-xs">Please fill out this field.</p>
+                                }
+                            </div>
                         </div>
 
 
@@ -166,7 +211,8 @@ const CreateDonation: React.FC<{ darkMode: boolean }> = ({ darkMode }) => {
                             <button className='
                                 border border-purple-700 rounded-[8px] p-[5px]
                                 bg-purple-700 font-bold hover:border-purple-500 hover:bg-purple-500
-                                text-white disabled:bg-purple-500
+                                hover:border-purple-500
+                                text-white disabled:bg-purple-500 disabled:border-purple-500
                                 '
                                 disabled={loading}
                                 type='submit'

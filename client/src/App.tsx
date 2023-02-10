@@ -70,7 +70,7 @@ function App() {
         />
 
         <Route
-          path='/donation'
+          path='/donation/:id'
           element={
             <Donation
               darkMode={darkMode}

@@ -33,7 +33,7 @@ const DonationsList: React.FC<{
                 donations.length > 0 ?
                     <div className='w-[90%] md:w-[80%] p-[5px]'>
                         <div className={`${darkMode ? 'text-white' : 'text-[#121212]'} mb-6`}>
-                            Donations (0)
+                            Donations ({donations.length})
                         </div>
 
                         <div className="grid gap-x-10 gap-y-4 md:grid-cols-3 sm:grid-cols-2 mb-16">
@@ -42,6 +42,7 @@ const DonationsList: React.FC<{
                                     <Card
                                         darkMode={darkMode}
                                         data={e}
+                                        id={index + 1}
                                         key={index}
                                     />
                                 ))

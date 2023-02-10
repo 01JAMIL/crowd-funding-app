@@ -6,12 +6,13 @@ import { Donation } from '../features/donation/Donation'
 const Card: React.FC<{
     darkMode: boolean
     data: Donation
-}> = ({ darkMode, data }) => {
+    id: number
+}> = ({ darkMode, data, id }) => {
 
     const navigate = useNavigate()
 
     const hanldeNavigate = () => {
-        navigate('/donation')
+        navigate(`/donation/${id}`)
     }
 
     return (
@@ -40,7 +41,7 @@ const Card: React.FC<{
                     <div className='flex justify-between items-center mb-4'>
                         <div>
                             <div className={`${darkMode ? 'text-gray-300' : 'text-gray-500'}`}>
-                                {parseInt(data.collectedAmount.toString(), 10)}
+                                {ethers.utils.formatEther(data.collectedAmount)}
                             </div>
                             <div className='text-xs text-gray-500'>
                                 Goal {ethers.utils.formatEther(data.goal)} Eth
@@ -50,7 +51,7 @@ const Card: React.FC<{
                         <div>
                             <div className={`${darkMode ? 'text-gray-300' : 'text-gray-500'}`}>
                                 {
-                                    new Date(parseInt(data.deadline.toString(), 10) - Date.now()).getDate().toString()
+                                    Math.ceil((new Date(parseInt(data.deadline.toString(), 10)).getTime() - new Date().getTime()) / (1000 * 3600 * 24))
                                 }
                             </div>
                             <div className='text-xs text-gray-500'>days left</div>

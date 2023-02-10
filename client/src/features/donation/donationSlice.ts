@@ -20,7 +20,7 @@ const connectSmartContract = async () => {
             string _image
         ) public returns (uint256)`,
 
-        'function donateToDonation(uint256 _id) public',
+        'function donateToDonation(uint256 _id) public payable',
         'function getDonators(uint256 _id) returns (address[] , uint256[])',
         `function getAllDonations() public view returns (${DonationType} [])`
     ]
@@ -52,6 +52,17 @@ export const saveDonation = createAsyncThunk('donation/save', async (data: Donat
 })
 
 
+export const donate = createAsyncThunk('donation/donate', async (data: any) => {
+    const { id, amount } = data
+
+    const contract: any = await connectSmartContract()
+
+    const transaction = await contract.donateToDonation(id, { value: amount })
+    await transaction.wait()
+
+    return data
+})
+
 const initialState: DonationInitialState = {
     loading: false,
     donations: [],
@@ -77,6 +88,7 @@ const donationSlice = createSlice({
 
         builder.addCase(getDonations.fulfilled, (state, action) => {
             state.loading = false
+            state.success = false
             state.donations = action.payload
             state.error = {}
         })
@@ -95,12 +107,25 @@ const donationSlice = createSlice({
         builder.addCase(saveDonation.fulfilled, (state, action) => {
             state.loading = false
             state.success = true
-            //console.log(BigInt(action.payload.returnedValue.logs[0].data).toString())
         })
 
         builder.addCase(saveDonation.rejected, (state, action) => {
             state.loading = false
             state.error = action.payload
+            state.success = false
+        })
+
+        builder.addCase(donate.pending, state => {
+            state.loading = true
+        })
+
+        builder.addCase(donate.fulfilled, (state, action) => {
+            state.loading = false
+            state.success = true
+        })
+
+        builder.addCase(donate.rejected, (state, action) => {
+            state.loading = false
             state.success = false
         })
     }
