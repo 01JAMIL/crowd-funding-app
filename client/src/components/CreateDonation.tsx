@@ -6,6 +6,8 @@ import { Donation } from '../features/donation/Donation'
 
 const CreateDonation: React.FC<{ darkMode: boolean }> = ({ darkMode }) => {
 
+    document.title = 'E-Donation | Create Donation'
+
     const { address } = useAppSelector(state => state.wallet)
     const { loading, success } = useAppSelector(state => state.donation)
     const dispatch = useAppDispatch()

@@ -3,10 +3,13 @@ import { useAppDispatch, useAppSelector } from '../store/hooks'
 import Card from './Card'
 import { getDonations } from '../features/donation/donationSlice'
 import { Donation } from '../features/donation/Donation'
+import { Backdrop, CircularProgress } from '@mui/material'
 
 const DonationsList: React.FC<{
     darkMode: boolean
 }> = ({ darkMode }) => {
+
+    document.title = 'E-Donation | Home'
 
     const { loading, donations } = useAppSelector(state => state.donation)
     const dispatch = useAppDispatch()
@@ -17,12 +20,13 @@ const DonationsList: React.FC<{
 
     if (loading) {
         return (
-            <div className='mt-[70px] flex justify-center items-center '>
-                <div className='w-[90%] md:w-[80%] p-[5px]'>
-                    <div className={`text-2xl text-center ${darkMode ? 'text-white' : 'text-[#121212]'} mb-6`}>
-                        Loading ...
-                    </div>
-                </div>
+            <div className='min-h-screen flex justify-center items-center '>
+                <Backdrop
+                    sx={{ color: '#fff', zIndex: (theme: any) => theme.zIndex.drawer + 1 }}
+                    open={loading}
+                >
+                    <CircularProgress color="inherit" />
+                </Backdrop>
             </div>
         )
     }

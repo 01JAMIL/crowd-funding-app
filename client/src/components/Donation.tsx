@@ -5,8 +5,11 @@ import { useParams } from 'react-router-dom'
 import { getDonations } from '../features/donation/donationSlice'
 import { ethers } from 'ethers'
 import { donate } from '../features/donation/donationSlice'
+import { Backdrop, CircularProgress } from '@mui/material'
 
 const Donation: React.FC<{ darkMode: boolean }> = ({ darkMode }) => {
+
+    document.title = 'E-Donation | Donation'
 
     const [error, setError] = useState<boolean>(false)
     const [form, setForm] = useState({
@@ -42,10 +45,13 @@ const Donation: React.FC<{ darkMode: boolean }> = ({ darkMode }) => {
 
     if (loading) {
         return (
-            <div className='mt-[70px] flex justify-center items-center'>
-                <div className='p-[5px] md:w-[80%] w-[90%]'>
-                    <div className={`text-2xl text-center ${darkMode ? 'text-white' : 'text-[#121212]'}`}>Loading ...</div>
-                </div>
+            <div className='min-h-screen flex justify-center items-center '>
+                <Backdrop
+                    sx={{ color: '#fff', zIndex: (theme: any) => theme.zIndex.drawer + 1 }}
+                    open={loading}
+                >
+                    <CircularProgress color="inherit" />
+                </Backdrop>
             </div>
         )
     }
@@ -176,67 +182,79 @@ const Donation: React.FC<{ darkMode: boolean }> = ({ darkMode }) => {
                                         </div>
                                     </div>
                                 </div>
+
                                 <div className='flex justify-center'>
-                                    <div className={`md:w-96 w-full ${darkMode ? 'text-white' : 'text-[#121212]'}`}>
-                                        <div className='font-bold mb-3'>
-                                            Fund
-                                        </div>
+                                    {
+                                        Math.ceil((new Date(parseInt(donation.deadline.toString(), 10)).getTime() - new Date().getTime()) / (1000 * 3600 * 24)) >= 1 ?
+                                            <div className={`md:w-96 w-full ${darkMode ? 'text-white' : 'text-[#121212]'}`}>
+                                                <div className='font-bold mb-3'>
+                                                    Fund
+                                                </div>
 
-                                        <div className={`p-2 shadow-xl rounded-lg ${darkMode ? 'bg-[#1c1c24]' : 'bg-white'}`}>
-                                            <div className='text-center mb-3'>
-                                                Fund now !
-                                            </div>
-
-                                            <div className='p-3'>
-                                                <form className='w-full' onSubmit={handleSubmit}>
-                                                    <label
-                                                        className='block tracking-wide text-xs font-bold mb-2' htmlFor='amount'>
-                                                        Amount
-                                                    </label>
-                                                    <input
-                                                        className={`
-                                                        appearance-none block w-full
-                                                        border p-[8px] rounded-[8px] mb-2
-                                                        leading-tight focus:outline-none
-                                                        ${darkMode ? 'bg-[#1c1c24] text-white' : 'bg-white focus:bg-white text-gray-700'}
-                                                        `}
-                                                        id='amount'
-                                                        type='number'
-                                                        min={0}
-                                                        step={0.000001}
-                                                        placeholder='ETH 0.1'
-                                                        onChange={(e) => setForm({
-                                                            ...form,
-                                                            amount: ethers.utils.parseEther(e.target.value).toString()
-                                                        })}
-                                                    />
-                                                    <div className='h-[15px] px-2 mb-2'>
-                                                        {
-                                                            (error && form.amount === '') && <p className="text-red-500 text-xs">Please fill out this field.</p>
-                                                        }
+                                                <div className={`p-2 shadow-xl rounded-lg ${darkMode ? 'bg-[#1c1c24]' : 'bg-white'}`}>
+                                                    <div className='text-center mb-3'>
+                                                        Fund now !
                                                     </div>
 
-                                                    <button
-                                                        type='submit'
-                                                        className='
+                                                    <div className='p-3'>
+                                                        <form className='w-full' onSubmit={handleSubmit}>
+                                                            <label
+                                                                className='block tracking-wide text-xs font-bold mb-2' htmlFor='amount'>
+                                                                Amount
+                                                            </label>
+                                                            <input
+                                                                className={`
+                                                                appearance-none block w-full
+                                                                border p-[8px] rounded-[8px] mb-2
+                                                                leading-tight focus:outline-none
+                                                                ${darkMode ? 'bg-[#1c1c24] text-white' : 'bg-white focus:bg-white text-gray-700'}
+                                                                `}
+                                                                id='amount'
+                                                                type='number'
+                                                                min={0}
+                                                                step={0.000001}
+                                                                placeholder='ETH 0.1'
+                                                                onChange={(e) => setForm({
+                                                                    ...form,
+                                                                    amount: ethers.utils.parseEther(e.target.value).toString()
+                                                                })}
+                                                            />
+                                                            <div className='h-[15px] px-2 mb-2'>
+                                                                {
+                                                                    (error && form.amount === '') && <p className="text-red-500 text-xs">Please fill out this field.</p>
+                                                                }
+                                                            </div>
+
+                                                            <button
+                                                                type='submit'
+                                                                className='
                                                         border border-purple-700 bg-purple-700 w-full p-[5px] 
                                                         rounded-[8px] text-white hover:border-purple-500 
-                                                        hover:bg-purple-500 disabled:bg-purple-500 disabled:border-purple-500'
-                                                        disabled={donation.owner.toUpperCase() === address.toUpperCase()}
-                                                    >
-                                                        {
-                                                            donation.owner.toUpperCase() === address.toUpperCase() ?
-                                                                'You are the owner' : 'Donate'
-                                                        }
-                                                    </button>
-                                                </form>
+                                                        hover:bg-purple-500 disabled:bg-purple-500 disabled:border-purple-500
+                                                        disabled:cursor-not-allowed
+                                                        '
+                                                                disabled={donation.owner.toUpperCase() === address.toUpperCase()}
+                                                            >
+                                                                {
+                                                                    donation.owner.toUpperCase() === address.toUpperCase() ?
+                                                                        'You are the owner' : 'Donate'
+                                                                }
+                                                            </button>
+                                                        </form>
 
 
+                                                    </div>
+
+                                                </div>
+
+                                            </div> :
+
+                                            <div className={`font-bold w-full text-center ${darkMode ? 'text-white' : 'text-[#121212]'}`}>
+                                                This donation is ended!
                                             </div>
-
-                                        </div>
-                                    </div>
+                                    }
                                 </div>
+
                             </div>
                         </> : null
                 }

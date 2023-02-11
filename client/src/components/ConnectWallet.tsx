@@ -5,6 +5,9 @@ import { walletConnection } from '../features/wallet/walletSlice'
 declare var window: any
 
 const ConnectWallet = () => {
+
+    document.title = 'E-Donation | Connect Wallet'
+
     const dispatch = useAppDispatch()
     const [error, setError] = useState<boolean>(false)
 

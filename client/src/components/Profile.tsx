@@ -6,8 +6,11 @@ import { checkConnectedAccounts, walletConnection } from '../features/wallet/wal
 import { getDonations } from '../features/donation/donationSlice'
 import Card from './Card'
 import { Donation } from '../features/donation/Donation'
+import { Backdrop, CircularProgress } from '@mui/material'
 
 const Profile: React.FC<{ darkMode: boolean }> = ({ darkMode }) => {
+
+    document.title = 'E-Donation | Profile'
 
     const { connected, address, balance } = useAppSelector(state => state.wallet)
     const { loading, donations } = useAppSelector(state => state.donation)
@@ -23,10 +26,13 @@ const Profile: React.FC<{ darkMode: boolean }> = ({ darkMode }) => {
 
     if (loading) {
         return (
-            <div className='mt-[70px] flex justify-center items-center'>
-                <div className='p-[5px] md:w-[80%] w-[90%]'>
-                    <div className={`text-2xl text-center ${darkMode ? 'text-white' : 'text-[#121212]'}`}>Loading ...</div>
-                </div>
+            <div className='min-h-screen flex justify-center items-center'>
+                <Backdrop
+                    sx={{ color: '#fff', zIndex: (theme: any) => theme.zIndex.drawer + 1 }}
+                    open={loading}
+                >
+                    <CircularProgress color="inherit" />
+                </Backdrop>
             </div>
         )
     }
