@@ -36,6 +36,16 @@ const Navbar: React.FC<{
         navigate(to)
     }
 
+    const handleChangeMode = () => {
+        if (darkMode) {
+            setDarkMode(false)
+            localStorage.setItem('mode', 'light')
+        } else {
+            setDarkMode(true)
+            localStorage.setItem('mode', 'dark')
+        }
+    }
+
     return (
         <div className={`fixed top-0 flex justify-center items-center w-full ${darkMode ? 'bg-[#121212]' : 'bg-white'} z-50`}>
             <div
@@ -75,32 +85,20 @@ const Navbar: React.FC<{
                     <div className='flex gap-x-[5px] mr-6 md:mb-0 mb-[25px]'>
 
                         <button
-                            className={`p-[5px] rounded-[8px] disabled:opacity-50 ${darkMode ? 'bg-white' : 'border border-[#121212]'}`}
-                            disabled={!darkMode}
-                            onClick={() => {
-                                setDarkMode(false)
-                                localStorage.setItem('mode', 'light')
-                            }}
+                            className={`p-[5px] rounded-[8px] disabled:opacity-50`}
+                            onClick={handleChangeMode}
                         >
-                            <LightModeIcon
-                                className="text-amber-300"
-                            />
+                            {
+                                darkMode ?
+                                    <LightModeIcon
+                                        className="text-amber-300"
+                                    /> :
+
+                                    <DarkModeIcon
+                                        className="text-[#121212]"
+                                    />
+                            }
                         </button>
-
-                        <button
-                            className={`p-[5px] rounded-[8px] disabled:opacity-50 ${darkMode ? 'bg-white' : 'border border-[#121212]'}`}
-                            disabled={darkMode}
-                            onClick={() => {
-                                setDarkMode(true)
-                                localStorage.setItem('mode', 'dark')
-                            }}
-                        >
-                            <DarkModeIcon
-                                className="text-[#121212]"
-                            />
-                        </button>
-
-
                     </div>
 
                     <div
