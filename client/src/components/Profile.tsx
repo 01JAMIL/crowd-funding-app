@@ -75,7 +75,7 @@ const Profile: React.FC<{ darkMode: boolean }> = ({ darkMode }) => {
                 </div>
 
                 <div className={`mb-6 px-3 text-sm py-1 ${darkMode ? 'text-white' : 'text-[#121212]'}`}>
-                    You donations ({donations.filter(e => e.owner.toUpperCase() === address.toUpperCase()).length})
+                    Your donations ({donations.filter(e => e.owner.toUpperCase() === address.toUpperCase()).length})
                 </div>
 
                 <div className="grid gap-x-10 gap-y-4 md:grid-cols-3 sm:grid-cols-2 mb-16">

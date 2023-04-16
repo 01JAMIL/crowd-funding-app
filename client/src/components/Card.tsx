@@ -49,12 +49,22 @@ const Card: React.FC<{
                         </div>
 
                         <div>
-                            <div className={`${darkMode ? 'text-gray-300' : 'text-gray-500'}`}>
-                                {
-                                    Math.ceil((new Date(parseInt(data.deadline.toString(), 10)).getTime() - new Date().getTime()) / (1000 * 3600 * 24))
-                                }
-                            </div>
-                            <div className='text-xs text-gray-500'>days left</div>
+
+                            {
+                                Math.ceil((new Date(parseInt(data.deadline.toString(), 10)).getTime() - new Date().getTime()) / (1000 * 3600 * 24)) >= 1 ?
+                                    <>
+                                        <div className={`${darkMode ? 'text-gray-300' : 'text-gray-500'}`}>
+                                            {
+                                                Math.ceil((new Date(parseInt(data.deadline.toString(), 10)).getTime() - new Date().getTime()) / (1000 * 3600 * 24))
+                                            }
+                                        </div>
+                                        <div className='text-xs text-gray-500'>days left</div>
+                                    </> :
+
+                                    <div className='text-red-400 text-xs'>
+                                        Ended
+                                    </div>
+                            }
                         </div>
                     </div>
 

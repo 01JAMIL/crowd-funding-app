@@ -5,15 +5,17 @@ import LightModeIcon from '@mui/icons-material/LightMode'
 import DarkModeIcon from '@mui/icons-material/DarkMode'
 import MenuIcon from '@mui/icons-material/Menu'
 import CloseIcon from '@mui/icons-material/Close'
-import PersonIcon from '@mui/icons-material/Person';
+import PersonIcon from '@mui/icons-material/Person'
 import HomeIcon from '@mui/icons-material/Home'
 import { useNavigate } from 'react-router-dom'
+import { useAppSelector } from '../store/hooks'
 
 const Navbar: React.FC<{
     setDarkMode: React.Dispatch<React.SetStateAction<boolean>>
     darkMode: boolean
 }> = ({ setDarkMode, darkMode }) => {
 
+    const { notifications } = useAppSelector(store => store.notifications)
     const [openNavbar, setOpenNavbar] = useState<boolean>(false)
     const navRef = useRef<any>()
     const navigate = useNavigate()
@@ -47,11 +49,10 @@ const Navbar: React.FC<{
     }
 
     return (
-        <div className={`fixed top-0 flex justify-center items-center w-full ${darkMode ? 'bg-[#121212]' : 'bg-white'} z-50`}>
+        <div className={`fixed top-0 flex justify-center items-center border-b-[1px] border-[${darkMode ? 'rgba(255,255,255,0.2)' : 'rgba(0,0,0,0.3)'}] w-full ${darkMode ? 'bg-[#121212]' : 'bg-white'} z-50`}>
             <div
                 className={`
-                    relative h-full flex md:items-center border-b-[1px] 
-                    border-[${darkMode ? 'rgba(255,255,255,0.2)' : 'rgba(0,0,0,0.3)'}]
+                    relative h-full flex md:items-center
                     w-[90%] md:w-[80%]  md:flex-row flex-col`}
                 ref={navRef}
             >
@@ -104,8 +105,8 @@ const Navbar: React.FC<{
                     <div
                         className={`
                         flex items-center md:mb-0 mb-[10px] md:w-max w-[150px] 
-                        cursor-pointer mr-2 p-[5px] rounded-[8px] 
-                        ${darkMode ? 'bg-white' : 'border border-[#121212]'}
+                        cursor-pointer mr-2 p-[5px] rounded-[8px] border
+                        ${darkMode ? 'bg-white' : ''}
                         hover:bg-gray-200
                         `}
                         onClick={() => handleNavigate('/')}
@@ -119,12 +120,15 @@ const Navbar: React.FC<{
                         </span>
                     </div>
 
-                    <div className={`
-                    flex items-center relative md:mb-0 mb-[10px] md:w-max w-[150px] 
-                    cursor-pointer mr-2 p-[5px] rounded-[8px] 
-                    ${darkMode ? 'bg-white' : 'border border-[#121212]'}
-                    hover:bg-gray-200
-                    `}>
+                    <div
+                        className={`
+                        flex items-center relative md:mb-0 mb-[10px] md:w-max w-[150px] 
+                        cursor-pointer mr-2 p-[5px] rounded-[8px] border
+                        ${darkMode ? 'bg-white' : ''}
+                        hover:bg-gray-200
+                        `}
+                        onClick={() => handleNavigate('/notifications')}
+                    >
                         <NotificationsIcon
                             className='mr-2 md:mr-0'
                         />
@@ -133,22 +137,29 @@ const Navbar: React.FC<{
                             Notifications
                         </span>
 
-                        <span className='flex z-50'>
-                            <span className='
-                        animate-ping absolute top-[-2px] right-[-2px] inline-flex 
-                        h-[10px] w-[10px] rounded-full bg-red-400 opacity-75'></span>
-                            <span className='
-                        absolute top-[-2px] right-[-2px] inline-flex 
-                        h-[10px] w-[10px] rounded-full bg-red-500'></span>
-                        </span>
+                        {notifications.filter(e => e.seen === false).length > 0 ?
+                            <span className='flex z-50'>
+                                <span
+                                    className='
+                                animate-ping absolute top-[-2px] right-[-2px] inline-flex 
+                                h-[10px] w-[10px] rounded-full bg-red-400 opacity-75'>
+
+                                </span>
+                                <span
+                                    className='
+                                absolute top-[-2px] right-[-2px] inline-flex 
+                                h-[10px] w-[10px] rounded-full bg-red-500'>
+
+                                </span>
+                            </span> : null}
                     </div>
 
 
                     <div
                         className={`
                         relative flex items-center md:mb-0 mb-[10px] md:w-max w-[150px] 
-                        cursor-pointer mr-2 p-[5px] rounded-[8px] 
-                        ${darkMode ? 'bg-white' : 'border border-[#121212]'}
+                        cursor-pointer mr-2 p-[5px] rounded-[8px] border
+                        ${darkMode ? 'bg-white' : ''}
                         hover:bg-gray-200
                         `}
                         onClick={() => handleNavigate('/profile')}

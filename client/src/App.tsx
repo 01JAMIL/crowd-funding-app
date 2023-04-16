@@ -9,6 +9,8 @@ import ConnectWallet from './components/ConnectWallet'
 import { useAppDispatch, useAppSelector } from './store/hooks'
 import { checkConnectedAccounts, walletConnection } from './features/wallet/walletSlice'
 import Profile from './components/Profile'
+import Notifications from './components/Notifications'
+import { getReceiverNotifications } from './features/notification/notificationSlice'
 
 declare var window: any
 
@@ -16,6 +18,7 @@ function App() {
   const { connected } = useAppSelector(store => store.wallet)
   const [darkMode, setDarkMode] = useState<boolean>(true)
   const [changed, setChanged] = useState<boolean>(true)
+  const { address } = useAppSelector(store => store.wallet)
 
   const dispatch = useAppDispatch()
 
@@ -33,6 +36,7 @@ function App() {
 
       if (connected) {
         dispatch(walletConnection())
+        address && dispatch(getReceiverNotifications(address.toLowerCase()))
       }
 
       window.ethereum.on('chainChanged', () => {
@@ -43,7 +47,7 @@ function App() {
         setChanged(!changed)
       })
     }
-  }, [darkMode, changed, dispatch, connected])
+  }, [darkMode, changed, dispatch, connected, address])
 
 
   if (!connected) {
@@ -90,6 +94,15 @@ function App() {
           path='/profile'
           element={
             <Profile
+              darkMode={darkMode}
+            />
+          }
+        />
+
+        <Route
+          path='/notifications'
+          element={
+            <Notifications
               darkMode={darkMode}
             />
           }

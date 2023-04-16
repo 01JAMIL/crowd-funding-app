@@ -6,7 +6,7 @@ import { getDonations } from '../features/donation/donationSlice'
 import { ethers } from 'ethers'
 import { donate } from '../features/donation/donationSlice'
 import { Backdrop, CircularProgress } from '@mui/material'
-
+import { saveNotification } from '../features/notification/notificationSlice'
 const Donation: React.FC<{ darkMode: boolean }> = ({ darkMode }) => {
 
     document.title = 'E-Donation | Donation'
@@ -34,12 +34,33 @@ const Donation: React.FC<{ darkMode: boolean }> = ({ darkMode }) => {
             form.id = parseInt(id) - 1
             form.address = donation.owner
 
+
+
             dispatch(donate(form))
+
+
         }
+    }
+
+    const sendNotification = () => {
+        const notificationData = {
+            sender: address,
+            receiver: donation.owner.toLowerCase(),
+            amount: form.amount,
+            donationId: parseInt(id),
+            donationImage: donation.image,
+            donationTitle: donation.title
+        }
+        console.log(notificationData)
+        dispatch(saveNotification(notificationData))
     }
 
     useEffect(() => {
         dispatch(getDonations())
+
+        if (success) {
+            sendNotification()
+        }
     }, [dispatch, success])
 
 
@@ -106,7 +127,11 @@ const Donation: React.FC<{ darkMode: boolean }> = ({ darkMode }) => {
                                         </div>
                                         <div className='text-sm p-2 text-justify'>
                                             {
-                                                Math.ceil((new Date(parseInt(donation.deadline.toString(), 10)).getTime() - new Date().getTime()) / (1000 * 3600 * 24))
+                                                Math.ceil((new Date(parseInt(donation.deadline.toString(), 10)).getTime() - new Date().getTime()) / (1000 * 3600 * 24)) >= 1 ?
+                                                Math.ceil((new Date(parseInt(donation.deadline.toString(), 10)).getTime() - new Date().getTime()) / (1000 * 3600 * 24))  :
+                                                <span className='text-red-400'>
+                                                    No days left this donation is endned.
+                                                </span>
                                             }
                                         </div>
                                     </div>
