@@ -79,7 +79,7 @@ const Donation: React.FC<{ darkMode: boolean }> = ({ darkMode }) => {
 
     return (
         <div className='mt-[70px] flex justify-center items-center'>
-            <div className='p-[5px] md:w-[80%] w-[90%] mb-[20px]'>
+            <div className='p-[5px] md:w-[80%] w-[100%] mb-[20px]'>
                 {
                     donation ?
 

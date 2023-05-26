@@ -35,7 +35,7 @@ const DonationsList: React.FC<{
         <div className='mt-[70px] flex justify-center items-center '>
             {
                 donations.length > 0 ?
-                    <div className='w-[90%] md:w-[80%] p-[5px]'>
+                    <div className='w-[100%] md:w-[80%] p-[5px]'>
                         <div className={`${darkMode ? 'text-white' : 'text-[#121212]'} mb-6`}>
                             Donations ({donations.length})
                         </div>

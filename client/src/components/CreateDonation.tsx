@@ -73,7 +73,7 @@ const CreateDonation: React.FC<{ darkMode: boolean }> = ({ darkMode }) => {
 
     return (
         <div className='mt-[70px] flex justify-center items-center'>
-            <div className='p-[5px] md:w-[80%] w-[90%]'>
+            <div className='p-[5px] md:w-[80%] w-[100%]'>
                 <div className={`mb-5 ${darkMode ? 'text-white' : 'text-[#121212]'}`}>
                     Create donation
                 </div>

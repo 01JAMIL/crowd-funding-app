@@ -53,7 +53,7 @@ const Navbar: React.FC<{
             <div
                 className={`
                     relative h-full flex md:items-center
-                    w-[90%] md:w-[80%]  md:flex-row flex-col`}
+                    w-[100%] md:w-[80%]  md:flex-row flex-col`}
                 ref={navRef}
             >
                 <div className='flex items-center'>
